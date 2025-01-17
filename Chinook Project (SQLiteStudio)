@@ -1,0 +1,70 @@
+#For this project I downloaded a Project called Chinook.zip 
+# The project was written using SQLiteStudio and used data from the database
+
+
+
+#Find the customers with their full names, customer ID and country who are not in the US
+
+select customerid, FirstName, country 
+FROM Chinook.customers
+WHERE country <> 'USA';
+
+
+#Show only the Customers from Brazil with their Name.
+
+select FirstName, country 
+FROM Chinook.customers
+WHERE country = 'Brazil';
+
+
+#Find the Invoices of customers who are from Brazil.
+
+select  CONCAT (firstname, " ",lastname) as fullName, invoiceId, InvoiceDate, Billingcountry
+FROM Chinook.customers as customer
+INNER JOIN  Chinook.invoices as invoice
+ON  customer.CustomerId = invoice.CustomerId
+WHERE Billingcountry = 'Brazil';
+
+
+#Show the Employees who are Sales Agents.
+
+select CONCAT (firstname," ", lastname) as FullName, title
+FROM Chinook.employees
+WHERE title LIKE '%Sales%Agent%';
+
+
+#Write a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name.
+
+SELECT emp.LastName, emp.Firstname, inv.InvoiceId
+FROM chinook.Employees emp 
+JOIN chinook.Customers cust ON cust.SupportRepId = emp.EmployeeId
+JOIN chinook.Invoices Inv ON Inv.CustomerId = cust.CustomerId;
+
+
+#Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
+
+select Customers.FirstName as CustomerName, Employees.Firstname as SalesAgentName, Invoices.BillingCountry as Country, Invoices.total
+FROM Chinook.customers as customers
+INNER JOIN Chinook.Invoices as Invoices
+ON Customers.CustomerId = Invoices.CustomerId
+INNER JOIN chinook.employees as Employees
+ON employees.EmployeeId = Customers.SupportRepId;
+
+
+#What are the total sales for 2009?
+
+select SUM(Invoices.Total) as Total
+FROM Chinook.Invoices
+WHERE InvoiceDate like '%2009%';
+
+
+#Write a query that includes the purchased track name AND artist name with each invoice line ID.
+
+select Artists.Name as ArtistName, Invoice.InvoiceLineId as Invoice, Tracks.Name as TrackName
+FROM invoice_items as Invoice
+LEFT JOIN tracks as Tracks
+ON  Invoice.TrackId = Tracks.TrackId
+INNER JOIN Albums
+ON Albums.AlbumId = Tracks.AlbumId
+RIGHT JOIN Artists
+ON Artists.ArtistId= Albums.ArtistId;
